@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stephen Edor Analytics — Research & Data Analysis Consultant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1117;
+    --paper: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --gold-pale: #faf3e0;
+    --sage: #1e3a2f;
+    --sage-mid: #2d5443;
+    --sage-light: #3d6e58;
+    --cream: #faf8f3;
+    --muted: #6b6252;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.45);
+    --wa: #25D366;
+    --fb: #1877F2;
+    --li: #0A66C2;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; line-height: 1.6; }
+
+  /* TOPBAR */
+  .topbar { background: var(--sage); padding: 0.55rem 2rem; display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .topbar-item { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; letter-spacing: 0.08em; color: var(--gold-light); text-decoration: none; font-weight: 500; transition: opacity 0.2s; }
+  .topbar-item:hover { opacity: 0.75; }
+  .topbar-div { width: 1px; height: 14px; background: rgba(201,168,76,0.3); }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 200; background: rgba(250,248,243,0.96); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 1rem 4rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 900; color: var(--ink); text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 0.3rem; align-items: center; list-style: none; }
+  .nav-links a { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 0.4rem 0.75rem; border-radius: 3px; transition: all 0.2s; }
+  .nav-links a:hover { color: var(--ink); background: var(--gold-pale); }
+  .nav-cta { background: var(--sage) !important; color: var(--gold-light) !important; }
+  .nav-cta:hover { background: var(--sage-mid) !important; }
+  .nav-socials { display: flex; gap: 0.4rem; }
+  .nsb { width: 34px; height: 34px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; text-decoration: none; }
+  .nsb.wa { background: rgba(37,211,102,0.1); color: var(--wa); }
+  .nsb.wa:hover { background: var(--wa); color: white; }
+  .nsb.li { background: rgba(10,102,194,0.1); color: var(--li); }
+  .nsb.li:hover { background: var(--li); color: white; }
+  .nsb.fb { background: rgba(24,119,242,0.1); color: var(--fb); }
+  .nsb.fb:hover { background: var(--fb); color: white; }
+
+  /* HERO */
+  .hero { min-height: 92vh; display: grid; grid-template-columns: 1.1fr 0.9fr; position: relative; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3.5rem 5rem 4rem; position: relative; z-index: 2; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gold-pale); border: 1px solid var(--border-strong); padding: 0.45rem 1rem; border-radius: 100px; margin-bottom: 2rem; width: fit-content; opacity: 0; animation: slideUp 0.7s 0.1s forwards; }
+  .hero-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  .hero-badge-text { font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5vw, 5rem); font-weight: 900; line-height: 1.02; color: var(--ink); margin-bottom: 1.8rem; opacity: 0; animation: slideUp 0.7s 0.25s forwards; }
+  .hero-title em { font-style: italic; color: var(--sage); }
+  .hero-title .ug { position: relative; display: inline-block; }
+  .hero-title .ug::after { content: ''; position: absolute; bottom: 2px; left: 0; right: 0; height: 4px; background: var(--gold); border-radius: 2px; opacity: 0.6; }
+  .hero-body { font-size: 1.08rem; line-height: 1.8; color: var(--muted); max-width: 520px; margin-bottom: 2.5rem; font-weight: 300; opacity: 0; animation: slideUp 0.7s 0.4s forwards; }
+  .hero-body strong { color: var(--ink); font-weight: 600; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; opacity: 0; animation: slideUp 0.7s 0.55s forwards; }
+  .hero-proof { display: flex; align-items: center; gap: 1rem; opacity: 0; animation: slideUp 0.7s 0.7s forwards; }
+  .proof-avs { display: flex; }
+  .proof-av { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--cream); background: var(--sage); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: var(--gold-light); margin-left: -8px; font-family: 'Playfair Display', serif; }
+  .proof-av:first-child { margin-left: 0; }
+  .proof-txt { font-size: 0.82rem; color: var(--muted); }
+  .proof-txt strong { color: var(--ink); font-weight: 600; }
+  .hero-right { position: relative; overflow: hidden; background: var(--sage); display: flex; align-items: center; justify-content: center; }
+  .hero-rp { position: absolute; inset: 0; background: radial-gradient(circle at 30% 70%, rgba(201,168,76,0.12) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 40%); }
+  .hero-rg { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+  .hero-card { position: relative; z-index: 2; padding: 2.5rem; width: 340px; opacity: 0; animation: slideLeft 0.8s 0.6s forwards; }
+  .hsr { padding: 1.8rem 0; border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .hsr:first-child { padding-top: 0; }
+  .hsr:last-child { border-bottom: none; padding-bottom: 0; }
+  .hsn { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 0.3rem; }
+  .hsl { font-size: 0.85rem; color: rgba(250,248,243,0.6); font-weight: 300; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.9rem 1.8rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; border-radius: 4px; transition: all 0.25s; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; }
+  .btn-primary { background: var(--sage); color: var(--gold-light); border: 1.5px solid var(--sage); }
+  .btn-primary:hover { background: var(--sage-mid); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(30,58,47,0.28); }
+  .btn-wa { background: var(--wa); color: white; border: 1.5px solid var(--wa); }
+  .btn-wa:hover { background: #20bb5a; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.3); }
+  .btn-outline { background: transparent; color: var(--ink); border: 1.5px solid rgba(13,17,23,0.25); }
+  .btn-outline:hover { background: var(--ink); color: var(--cream); transform: translateY(-2px); }
+  .btn-gold { background: var(--gold); color: var(--ink); border: 1.5px solid var(--gold); font-weight: 700; }
+  .btn-gold:hover { background: #b8962e; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,0.35); }
+  .btn-sm { padding: 0.55rem 1.1rem; font-size: 0.78rem; }
+
+  /* MARQUEE */
+  .mq-wrap { background: var(--ink); padding: 0.85rem 0; overflow: hidden; }
+  .mq-track { display: flex; gap: 2.5rem; animation: marquee 30s linear infinite; width: max-content; white-space: nowrap; }
+  .mq-item { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(232,213,163,0.65); font-weight: 500; display: flex; align-items: center; gap: 0.8rem; }
+  .mq-sep { color: var(--gold); }
+
+  /* SECTION COMMONS */
+  .eyebrow { display: inline-flex; align-items: center; gap: 0.7rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  .eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--gold); display: inline-block; border-radius: 1px; }
+  .eyebrow.center { justify-content: center; }
+  .eyebrow.center::before { display: none; }
+  .sh { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; line-height: 1.1; color: var(--ink); margin-bottom: 1.2rem; }
+  .sh em { font-style: italic; color: var(--sage); }
+  .sh.dk { color: var(--cream); }
+  .sh.dk em { color: var(--gold); }
+  .sub { font-size: 1rem; line-height: 1.8; color: var(--muted); font-weight: 300; }
+  .sub strong { color: var(--ink); font-weight: 600; }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ABOUT */
+  .about { padding: 8rem 4rem; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .big-q { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 2.2vw, 1.85rem); font-style: italic; line-height: 1.5; color: var(--sage); border-left: 4px solid var(--gold); padding-left: 1.8rem; margin: 2rem 0; }
+  .pills { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .pill { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; padding: 0.45rem 1rem; border-radius: 100px; border: 1.5px solid var(--border-strong); color: var(--sage); background: var(--gold-pale); transition: all 0.2s; cursor: default; }
+  .pill:hover { background: var(--sage); color: var(--gold-light); border-color: var(--sage); }
+  .creds { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .cred { display: flex; align-items: flex-start; gap: 1rem; padding: 1.4rem; background: white; border: 1px solid var(--border); border-radius: 8px; transition: all 0.25s; }
+  .cred:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(201,168,76,0.12); transform: translateX(4px); }
+  .cred-ic { font-size: 1.5rem; flex-shrink: 0; }
+  .cred-t { font-weight: 600; font-size: 0.93rem; color: var(--ink); margin-bottom: 0.2rem; }
+  .cred-d { font-size: 0.8rem; color: var(--muted); font-weight: 300; line-height: 1.55; }
+
+  /* SERVICES */
+  .services { background: var(--sage); padding: 8rem 4rem; }
+  .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(201,168,76,0.1); border-radius: 8px; overflow: hidden; margin-top: 3rem; }
+  .svc-card { background: rgba(255,255,255,0.04); padding: 2.5rem; position: relative; overflow: hidden; transition: background 0.25s; }
+  .svc-card:hover { background: rgba(255,255,255,0.08); }
+  .svc-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .svc-card:hover::after { transform: scaleX(1); }
+  .svc-n { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900; color: rgba(201,168,76,0.1); line-height: 1; position: absolute; top: 1.2rem; right: 1.5rem; }
+  .svc-ic { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+  .svc-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--cream); margin-bottom: 0.75rem; }
+  .svc-desc { font-size: 0.87rem; line-height: 1.7; color: rgba(250,248,243,0.5); font-weight: 300; margin-bottom: 1.8rem; }
+  .svc-price { font-size: 0.82rem; font-weight: 600; color: var(--gold); letter-spacing: 0.05em; border-top: 1px solid rgba(201,168,76,0.15); padding-top: 1.2rem; display: block; }
+
+  /* PROCESS */
+  .process { padding: 8rem 4rem; background: var(--paper); }
+  .proc-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; position: relative; margin-top: 4rem; }
+  .proc-line { position: absolute; top: 2.5rem; left: calc(12.5% + 1.5rem); right: calc(12.5% + 1.5rem); height: 1px; background: var(--border-strong); }
+  .proc-step { text-align: center; position: relative; }
+  .proc-circ { width: 5rem; height: 5rem; border-radius: 50%; background: var(--cream); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900; color: var(--gold); position: relative; z-index: 1; transition: all 0.3s; }
+  .proc-step:hover .proc-circ { background: var(--sage); color: var(--gold-light); border-color: var(--sage); }
+  .proc-t { font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 0.5rem; }
+  .proc-d { font-size: 0.83rem; color: var(--muted); line-height: 1.65; font-weight: 300; }
+
+  /* TESTIMONIALS */
+  .testi { padding: 8rem 4rem; background: var(--cream); }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3.5rem; }
+  .tc { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 2.2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+  .tc:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(201,168,76,0.14); }
+  .tc.ft { background: var(--sage); border-color: var(--sage); }
+  .tc.ft .tc-text { color: rgba(250,248,243,0.8); }
+  .tc.ft .tc-name { color: var(--cream); }
+  .tc.ft .tc-role { color: rgba(250,248,243,0.5); }
+  .tc.ft .stars { color: var(--gold); }
+  .tc.ft .qmark { color: rgba(201,168,76,0.18); }
+  .tc.ft .tc-av { background: rgba(255,255,255,0.15); }
+  .qmark { font-family: 'Playfair Display', serif; font-size: 4rem; line-height: 0.8; display: block; margin-bottom: 0.5rem; color: rgba(201,168,76,0.2); font-style: italic; }
+  .stars { color: var(--gold); font-size: 0.88rem; margin-bottom: 1rem; letter-spacing: 0.08em; }
+  .tc-text { font-size: 0.93rem; line-height: 1.75; color: var(--muted); font-weight: 300; margin-bottom: 1.5rem; font-style: italic; }
+  .tc-author { display: flex; align-items: center; gap: 0.9rem; }
+  .tc-av { width: 44px; height: 44px; border-radius: 50%; background: var(--sage); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); flex-shrink: 0; }
+  .tc-name { font-weight: 600; font-size: 0.9rem; color: var(--ink); }
+  .tc-role { font-size: 0.77rem; color: var(--muted); font-weight: 300; }
+  .tc-ph { background: var(--gold-pale); border: 2px dashed var(--border-strong); border-radius: 12px; padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 0.75rem; }
+  .tc-ph-ic { font-size: 2rem; opacity: 0.35; }
+  .tc-ph-t { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+  .tc-ph-t strong { color: var(--sage); font-weight: 600; display: block; margin-bottom: 0.25rem; font-size: 0.92rem; }
+  .testi-cta { text-align: center; margin-top: 2.5rem; }
+  .testi-cta p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem; }
+
+  /* TRUST */
+  .trust { background: var(--ink); padding: 5rem 4rem; }
+  .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(201,168,76,0.1); border-radius: 8px; overflow: hidden; }
+  .trust-item { background: rgba(255,255,255,0.03); padding: 2.5rem 2rem; text-align: center; transition: background 0.25s; }
+  .trust-item:hover { background: rgba(255,255,255,0.06); }
+  .trust-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 0.5rem; }
+  .trust-lbl { font-size: 0.83rem; color: rgba(250,248,243,0.5); font-weight: 300; line-height: 1.55; }
+
+  /* CTA */
+  .cta { padding: 9rem 4rem; background: linear-gradient(135deg, var(--sage) 0%, #0d2a20 100%); position: relative; overflow: hidden; text-align: center; }
+  .cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,168,76,0.1) 0%, transparent 60%); }
+  .cta-in { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 900; line-height: 1.05; color: var(--cream); margin-bottom: 1.5rem; }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-body { font-size: 1.05rem; color: rgba(250,248,243,0.6); line-height: 1.8; font-weight: 300; margin-bottom: 3rem; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .cta-row { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .cta-link { display: flex; align-items: center; gap: 0.6rem; font-size: 0.87rem; color: rgba(250,248,243,0.55); text-decoration: none; transition: color 0.2s; }
+  .cta-link:hover { color: var(--gold); }
+  .cta-note { font-size: 0.77rem; color: rgba(250,248,243,0.3); letter-spacing: 0.06em; }
+
+  /* SOCIAL CONNECT */
+  .sc { background: var(--paper); padding: 5rem 4rem; border-top: 1px solid var(--border); }
+  .sc-in { text-align: center; }
+  .sc h3 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; }
+  .sc p { font-size: 0.95rem; color: var(--muted); margin-bottom: 2.5rem; font-weight: 300; }
+  .sc-cards { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+  .sc-card { display: flex; align-items: center; gap: 0.9rem; padding: 1.1rem 1.8rem; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.93rem; transition: all 0.25s; min-width: 180px; justify-content: center; border: 2px solid transparent; }
+  .sc-card.wa { background: rgba(37,211,102,0.08); color: #1a9e4a; border-color: rgba(37,211,102,0.22); }
+  .sc-card.wa:hover { background: var(--wa); color: white; border-color: var(--wa); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(37,211,102,0.28); }
+  .sc-card.li { background: rgba(10,102,194,0.07); color: var(--li); border-color: rgba(10,102,194,0.18); }
+  .sc-card.li:hover { background: var(--li); color: white; border-color: var(--li); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,102,194,0.28); }
+  .sc-card.fb { background: rgba(24,119,242,0.07); color: var(--fb); border-color: rgba(24,119,242,0.18); }
+  .sc-card.fb:hover { background: var(--fb); color: white; border-color: var(--fb); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(24,119,242,0.28); }
+  .sc-card.em { background: rgba(201,168,76,0.08); color: #8b6914; border-color: var(--border-strong); }
+  .sc-card.em:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(201,168,76,0.28); }
+
+  /* FOOTER */
+  footer { background: var(--ink); padding: 2.8rem 4rem; border-top: 1px solid rgba(201,168,76,0.1); }
+  .ft-in { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+  .ft-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--cream); }
+  .ft-logo span { color: var(--gold); }
+  .ft-meta { font-size: 0.74rem; color: rgba(250,248,243,0.28); letter-spacing: 0.06em; }
+  .ft-socials { display: flex; gap: 0.6rem; }
+  .fts { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-decoration: none; border: 1px solid rgba(255,255,255,0.07); }
+  .fts:hover { transform: translateY(-2px); }
+  .fts.wa { color: var(--wa); } .fts.wa:hover { background: var(--wa); color: white; border-color: var(--wa); }
+  .fts.li { color: #5b9bd5; } .fts.li:hover { background: var(--li); color: white; border-color: var(--li); }
+  .fts.fb { color: #7eaee8; } .fts.fb:hover { background: var(--fb); color: white; border-color: var(--fb); }
+  .fts.em { color: var(--gold); } .fts.em:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes slideUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slideLeft { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.75s ease, transform 0.75s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media(max-width:960px){
+    nav { padding:1rem 1.5rem; }
+    .nav-links { display:none; }
+    .hero { grid-template-columns:1fr; min-height:auto; }
+    .hero-left { padding:4rem 1.5rem 3rem; }
+    .hero-right { min-height:300px; }
+    .hero-card { width:270px; }
+    .about { padding:4rem 1.5rem; }
+    .about-grid { grid-template-columns:1fr; gap:3rem; }
+    .services { padding:4rem 1.5rem; }
+    .svc-grid { grid-template-columns:1fr; }
+    .process { padding:4rem 1.5rem; }
+    .proc-steps { grid-template-columns:1fr 1fr; }
+    .proc-line { display:none; }
+    .testi { padding:4rem 1.5rem; }
+    .testi-grid { grid-template-columns:1fr; }
+    .trust { padding:3rem 1.5rem; }
+    .trust-grid { grid-template-columns:1fr 1fr; }
+    .cta { padding:5rem 1.5rem; }
+    .sc { padding:3.5rem 1.5rem; }
+    .sc-cards { flex-direction:column; align-items:center; }
+    footer { padding:2rem 1.5rem; }
+    .ft-in { flex-direction:column; text-align:center; }
+    .ft-socials { justify-content:center; }
+    .topbar { padding:0.5rem 1rem; gap:1rem; }
+    .topbar-div { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="topbar-item">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    +234 901 243 5686
+  </a>
+  <div class="topbar-div"></div>
+  <a href="mailto:stephenedor9@gmail.com" class="topbar-item">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    stephenedor9@gmail.com
+  </a>
+  <div class="topbar-div"></div>
+  <a href="https://www.linkedin.com/in/stephen-edor-908a11306" target="_blank" rel="noopener" class="topbar-item">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    LinkedIn
+  </a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Stephen Edor <span>Analytics</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="nav-socials">
+    <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="nsb wa" title="WhatsApp">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/stephen-edor-908a11306" target="_blank" rel="noopener" class="nsb li" title="LinkedIn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=100016530345666" target="_blank" rel="noopener" class="nsb fb" title="Facebook">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge"><span class="hero-badge-dot"></span><span class="hero-badge-text">12 Years · Clinical · Academic · Public Health</span></div>
+    <h1 class="hero-title">Your data deserves<br>to be <em>published,</em><br>not <span class="ug">forgotten.</span></h1>
+    <p class="hero-body">Over <strong>12 years across clinical, academic, and public health research</strong>, I've seen what separates research that gets published from research that sits in a drawer. It is almost always the analysis, interpretation, and write-up.<br><br>I take your raw data from <strong>SPSS to submission-ready manuscript.</strong></p>
+    <div class="hero-actions">
+      <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="btn btn-wa">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        WhatsApp Me Now
+      </a>
+      <a href="#services" class="btn btn-outline">View Services</a>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-avs">
+        <div class="proof-av">DR</div><div class="proof-av">PH</div><div class="proof-av">MS</div><div class="proof-av">+</div>
+      </div>
+      <p class="proof-txt"><strong>Clinicians & researchers</strong> across Nigeria trust this service</p>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-rp"></div><div class="hero-rg"></div>
+    <div class="hero-card">
+      <div class="hsr"><div class="hsn">12+</div><div class="hsl">Years of research & data analysis experience</div></div>
+      <div class="hsr"><div class="hsn">3</div><div class="hsl">Domains — Clinical, Academic & Public Health</div></div>
+      <div class="hsr"><div class="hsn">∞</div><div class="hsl">End-to-end — raw data to submission-ready manuscript</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span class="mq-item">SPSS Analysis <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Manuscript Writing <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Research Proposals <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Fellowship Applications <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Case Reports <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Statistical Interpretation <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Journal Submissions <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Public Health Reports <span class="mq-sep">✦</span></span>
+    <span class="mq-item">WACS Fellowship Proposals <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Epidemiology Studies <span class="mq-sep">✦</span></span>
+    <span class="mq-item">SPSS Analysis <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Manuscript Writing <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Research Proposals <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Fellowship Applications <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Case Reports <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Statistical Interpretation <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Journal Submissions <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Public Health Reports <span class="mq-sep">✦</span></span>
+    <span class="mq-item">WACS Fellowship Proposals <span class="mq-sep">✦</span></span>
+    <span class="mq-item">Epidemiology Studies <span class="mq-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="eyebrow">About Stephen Edor</div>
+        <h2 class="sh">The gap between data collected<br>and data <em>published</em></h2>
+        <p class="sub">Most clinicians finish data collection and hit a wall. The analysis feels overwhelming. The write-up never starts. Publications get delayed for years — or never happen at all.</p>
+        <blockquote class="big-q">"Twelve years has taught me one thing: great research never fails because of bad data. It fails because no one helped turn that data into a story worth reading."</blockquote>
+        <p class="sub">Based in Nigeria, I work with clinicians and researchers across West Africa — from residents preparing WACS fellowship proposals to lecturers submitting to indexed journals. I understand the pressures, the timelines, and what committees and reviewers actually look for.</p>
+        <div class="pills">
+          <span class="pill">Clinical Research</span><span class="pill">Academic Research</span><span class="pill">Public Health</span><span class="pill">Epidemiology</span><span class="pill">SPSS</span><span class="pill">Biostatistics</span><span class="pill">Medical Writing</span><span class="pill">WACS / NPMCN</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <ul class="creds">
+          <li class="cred"><span class="cred-ic">🔬</span><div><div class="cred-t">12+ Years Research Experience</div><div class="cred-d">Documented experience across clinical, academic, and public health domains — with hands-on SPSS analysis throughout.</div></div></li>
+          <li class="cred"><span class="cred-ic">📊</span><div><div class="cred-t">Full Statistical Capability</div><div class="cred-d">Descriptive stats, inferential tests, regression, multivariate analysis, and survival analysis — all in SPSS and Excel.</div></div></li>
+          <li class="cred"><span class="cred-ic">🎓</span><div><div class="cred-t">M.Sc. Biochemistry · MBA Agribusiness</div><div class="cred-d">Ahmadu Bello University, Zaria & Rome Business School — dual academic grounding in science and management research.</div></div></li>
+          <li class="cred"><span class="cred-ic">✍🏾</span><div><div class="cred-t">Author — SPSS for Postgraduate Researchers</div><div class="cred-d">A comprehensive technical book on statistical methods — from descriptive analysis to mediation and moderation, APA 7th edition.</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">What I Offer</div>
+      <h2 class="sh dk">Services & <em>Pricing</em></h2>
+      <p style="font-size:0.9rem;color:rgba(250,248,243,0.4);font-weight:300;">50% deposit upfront · Balance on delivery · Bank transfer</p>
+    </div>
+    <div class="svc-grid reveal">
+      <!-- DATA ANALYSIS — BASIC -->
+      <div class="svc-card"><span class="svc-n">01</span><span class="svc-ic">📊</span><div class="svc-name">Data Analysis — Basic</div><p class="svc-desc">Descriptive statistics, frequency tables, and basic inferential tests (t-test, chi-square). SPSS output with written interpretation. Ideal for simple datasets and student-level research.</p><span class="svc-price">₦50,000 – ₦100,000</span></div>
+      <!-- DATA ANALYSIS — STANDARD -->
+      <div class="svc-card" style="position:relative;"><span class="svc-n">02</span><span style="position:absolute;top:1.2rem;left:1.5rem;background:var(--gold);color:var(--ink);font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:100px;">Most Popular</span><span class="svc-ic" style="margin-top:2rem;">📈</span><div class="svc-name">Data Analysis — Standard</div><p class="svc-desc">Full SPSS analysis including regression, ANOVA, correlation, and multivariate tests. Annotated output tables with detailed written interpretation ready for manuscript insertion.</p><span class="svc-price">₦100,000 – ₦150,000</span></div>
+      <!-- DATA ANALYSIS — PREMIUM -->
+      <div class="svc-card"><span class="svc-n">03</span><span class="svc-ic">🔬</span><div class="svc-name">Data Analysis — Premium</div><p class="svc-desc">Complex analysis including survival analysis, mediation/moderation (PROCESS macro), logistic regression, and advanced multivariate methods. Full interpretation + results write-up included.</p><span class="svc-price">₦200,000 – ₦250,000</span></div>
+      <!-- OTHER SERVICES -->
+      <div class="svc-card"><span class="svc-n">04</span><span class="svc-ic">📄</span><div class="svc-name">Full Manuscript</div><p class="svc-desc">End-to-end: analysis, results, discussion, conclusion, abstract, and references — submission-ready for your target journal.</p><span class="svc-price">From ₦180,000</span></div>
+      <div class="svc-card"><span class="svc-n">05</span><span class="svc-ic">🎓</span><div class="svc-name">Fellowship Proposal</div><p class="svc-desc">WACS, NPMCN, or postgraduate proposals — structured and written to meet committee and fellowship requirements exactly.</p><span class="svc-price">From ₦130,000</span></div>
+      <div class="svc-card"><span class="svc-n">06</span><span class="svc-ic">🏥</span><div class="svc-name">Case Report Write-up</div><p class="svc-desc">Structured clinical case reports formatted for journal submission — from patient history to discussion and learning points.</p><span class="svc-price">From ₦65,000</span></div>
+      <div class="svc-card"><span class="svc-n">07</span><span class="svc-ic">📝</span><div class="svc-name">Results & Discussion</div><p class="svc-desc">Partial manuscript? I write or rewrite your results and discussion sections with statistical rigour and publication clarity.</p><span class="svc-price">From ₦90,000</span></div>
+      <div class="svc-card"><span class="svc-n">08</span><span class="svc-ic">🌍</span><div class="svc-name">Public Health Report</div><p class="svc-desc">Epidemiology studies, M&E reports, programme evaluations — structured for institutional, government, or NGO submission.</p><span class="svc-price">From ₦150,000</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;">
+      <div class="eyebrow center">How It Works</div>
+      <h2 class="sh" style="margin:0 auto 0.5rem;">From raw data to <em>published research</em></h2>
+    </div>
+    <div class="proc-steps reveal">
+      <div class="proc-line"></div>
+      <div class="proc-step"><div class="proc-circ">01</div><div class="proc-t">Send Your Data</div><p class="proc-d">Share your dataset, research brief, and target journal or institution. Nothing is too messy or too early-stage.</p></div>
+      <div class="proc-step"><div class="proc-circ">02</div><div class="proc-t">Scope & Deposit</div><p class="proc-d">I confirm the scope and timeline. You pay 50% deposit to begin. Bank transfer, simple and direct.</p></div>
+      <div class="proc-step"><div class="proc-circ">03</div><div class="proc-t">Analysis & Writing</div><p class="proc-d">I run your SPSS analysis, interpret results, and write your document — with regular progress updates.</p></div>
+      <div class="proc-step"><div class="proc-circ">04</div><div class="proc-t">Deliver & Refine</div><p class="proc-d">You receive a submission-ready document. Pay the balance and request any final refinements.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="testimonials">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;">
+      <div class="eyebrow center">Client Testimonials</div>
+      <h2 class="sh" style="margin:0 auto 0.75rem;">What researchers <em>say</em></h2>
+      <p class="sub" style="max-width:520px;margin:0 auto;">Real feedback from clinicians, residents, and researchers across Nigeria who have worked with Stephen Edor Analytics.</p>
+    </div>
+    <div class="testi-grid reveal">
+
+      <!-- PLACEHOLDER 1 -->
+      <div class="tc-ph">
+        <span class="tc-ph-ic">⭐</span>
+        <p class="tc-ph-t"><strong>Your testimonial could be here</strong>Were you helped with data analysis, a proposal, or a manuscript? Share your experience and help others find the right support.</p>
+        <a href="https://wa.me/2349012435686?text=Hi%20Stephen%2C%20I%20would%20like%20to%20leave%20a%20testimonial" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Leave a Review →</a>
+      </div>
+
+      <!-- FEATURED SAMPLE -->
+      <div class="tc ft">
+        <span class="qmark">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="tc-text">Stephen helped me turn 2 years of clinical data into a complete, submission-ready manuscript in under 3 weeks. His SPSS analysis was thorough and his write-up was exactly what the committee needed.</p>
+        <div class="tc-author">
+          <div class="tc-av">DR</div>
+          <div><div class="tc-name">Dr. [Your Name Here]</div><div class="tc-role">Resident Physician · Nigeria</div></div>
+        </div>
+      </div>
+
+      <!-- PLACEHOLDER 2 -->
+      <div class="tc-ph">
+        <span class="tc-ph-ic">✍🏾</span>
+        <p class="tc-ph-t"><strong>Be the next success story</strong>Join clinicians and researchers who have published their work with support from Stephen Edor Analytics.</p>
+        <a href="mailto:stephenedor9@gmail.com" class="btn btn-primary btn-sm">Start Your Project →</a>
+      </div>
+
+    </div>
+    <div class="testi-cta reveal">
+      <p>Have you worked with Stephen Edor Analytics? Your feedback helps others make the right decision.</p>
+      <a href="https://wa.me/2349012435686?text=Hi%20Stephen%2C%20I%20would%20like%20to%20leave%20a%20testimonial" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        Submit Your Testimonial via WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="wrap">
+    <div class="trust-grid reveal">
+      <div class="trust-item"><div class="trust-num">12+</div><div class="trust-lbl">Years of research experience across three domains</div></div>
+      <div class="trust-item"><div class="trust-num">100%</div><div class="trust-lbl">End-to-end — data to submission-ready document</div></div>
+      <div class="trust-item"><div class="trust-num">1</div><div class="trust-lbl">Direct contact — you always deal with Stephen</div></div>
+      <div class="trust-item"><div class="trust-num">24h</div><div class="trust-lbl">Response time for all new project enquiries</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="cta-in reveal">
+    <div class="eyebrow center">Let's Work Together</div>
+    <h2 class="cta-title">Your data has been<br>waiting <em>long enough.</em></h2>
+    <p class="cta-body">If you have research data sitting on your laptop, a proposal due, or a manuscript stalled halfway — let's talk. I take on a limited number of clients each month to ensure quality and personal attention.</p>
+    <div class="cta-btns">
+      <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="btn btn-wa">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        Chat on WhatsApp
+      </a>
+      <a href="mailto:stephenedor9@gmail.com" class="btn btn-gold">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Send an Email
+      </a>
+      <a href="https://www.linkedin.com/in/stephen-edor-908a11306" target="_blank" rel="noopener" class="btn" style="background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.28);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Connect on LinkedIn
+      </a>
+    </div>
+    <div class="cta-row">
+      <a href="mailto:stephenedor9@gmail.com" class="cta-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        stephenedor9@gmail.com
+      </a>
+      <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="cta-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        +234 901 243 5686
+      </a>
+    </div>
+    <p class="cta-note">Response within 24 hours · 50% deposit to begin · Bank transfer accepted</p>
+  </div>
+</section>
+
+<!-- SOCIAL CONNECT -->
+<section class="sc">
+  <div class="wrap">
+    <div class="sc-in reveal">
+      <h3>Connect & Follow</h3>
+      <p>Stay updated on research tips, publication insights, and available slots — pick your preferred platform.</p>
+      <div class="sc-cards">
+        <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="sc-card wa">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          WhatsApp · +234 901 243 5686
+        </a>
+        <a href="https://www.linkedin.com/in/stephen-edor-908a11306" target="_blank" rel="noopener" class="sc-card li">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn · Stephen Edor
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=100016530345666" target="_blank" rel="noopener" class="sc-card fb">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook · Stephen Edor
+        </a>
+        <a href="mailto:stephenedor9@gmail.com" class="sc-card em">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email · stephenedor9@gmail.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-in wrap">
+    <div class="ft-logo">Stephen Edor <span>Analytics</span></div>
+    <div class="ft-meta">stephenedor.com · Research & Data Analysis Consultant · Nigeria</div>
+    <div class="ft-socials">
+      <a href="https://wa.me/2349012435686" target="_blank" rel="noopener" class="fts wa" title="WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+      <a href="https://www.linkedin.com/in/stephen-edor-908a11306" target="_blank" rel="noopener" class="fts li" title="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a href="https://www.facebook.com/profile.php?id=100016530345666" target="_blank" rel="noopener" class="fts fb" title="Facebook"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+      <a href="mailto:stephenedor9@gmail.com" class="fts em" title="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
