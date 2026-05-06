@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPSS Knowledge Assessment Survey</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  :root {
+    --wa-green: #25D366;
+    --wa-dark-green: #128C7E;
+    --wa-teal: #075E54;
+    --wa-light-green: #DCF8C6;
+    --wa-msg-bg: #ffffff;
+    --wa-chat-bg: #e5ddd5;
+    --wa-header: #075E54;
+    --wa-sent: #DCF8C6;
+    --wa-received: #ffffff;
+    --wa-text: #303030;
+    --wa-sub: #667781;
+    --wa-tick: #53bdeb;
+    --wa-bubble-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px 10px;
+  }
+
+  .phone-shell {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    background: var(--wa-chat-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+  }
+
+  /* Header */
+  .wa-header {
+    background: var(--wa-teal);
+    padding: 12px 16px 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .back-icon { color: white; font-size: 22px; cursor: pointer; }
+
+  .contact-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--wa-dark-green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: white;
+    flex-shrink: 0;
+  }
+
+  .contact-info { flex: 1; }
+  .contact-name { color: white; font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .contact-status { color: rgba(255,255,255,0.75); font-size: 12px; }
+
+  .header-icons { display: flex; gap: 18px; color: white; font-size: 20px; }
+
+  /* Chat background pattern */
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 10px 80px;
+    background-color: var(--wa-chat-bg);
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b2bec3' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Date stamp */
+  .date-stamp {
+    text-align: center;
+    margin: 10px 0 16px;
+  }
+  .date-stamp span {
+    background: rgba(255,255,255,0.85);
+    color: var(--wa-sub);
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    box-shadow: var(--wa-bubble-shadow);
+  }
+
+  /* Bubbles */
+  .bubble-row { display: flex; margin-bottom: 4px; }
+  .bubble-row.sent { justify-content: flex-end; }
+  .bubble-row.received { justify-content: flex-start; }
+
+  .bubble {
+    max-width: 85%;
+    padding: 8px 12px 6px;
+    border-radius: 8px;
+    box-shadow: var(--wa-bubble-shadow);
+    position: relative;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--wa-text);
+  }
+
+  .bubble.sent {
+    background: var(--wa-sent);
+    border-top-right-radius: 2px;
+  }
+  .bubble.received {
+    background: var(--wa-received);
+    border-top-left-radius: 2px;
+  }
+
+  /* Tail for bubbles */
+  .bubble.sent::after {
+    content: '';
+    position: absolute;
+    top: 0; right: -8px;
+    border-left: 8px solid var(--wa-sent);
+    border-top: 8px solid transparent;
+  }
+  .bubble.received::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -8px;
+    border-right: 8px solid white;
+    border-top: 8px solid transparent;
+  }
+
+  .bubble .sender-name {
+    color: var(--wa-dark-green);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .bubble-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--wa-sub);
+    margin-top: 3px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tick { color: var(--wa-tick); font-size: 14px; }
+
+  /* Section header bubble */
+  .section-header {
+    background: var(--wa-teal);
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 16px;
+    text-align: center;
+    margin: 16px auto 10px;
+    display: table;
+    box-shadow: var(--wa-bubble-shadow);
+  }
+
+  /* Question block inside bubble */
+  .question-block { margin-bottom: 2px; }
+  .question-num {
+    color: var(--wa-dark-green);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .question-text { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+
+  /* Answer inputs */
+  .ans-text {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13.5px;
+    color: var(--wa-text);
+    background: #fafafa;
+    resize: none;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .ans-text:focus { border-color: var(--wa-green); }
+
+  .radio-group, .check-group { display: flex; flex-direction: column; gap: 5px; }
+  .radio-group label, .check-group label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13.5px; cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .radio-group label:hover, .check-group label:hover { background: rgba(37,211,102,0.1); }
+
+  input[type=radio], input[type=checkbox] {
+    accent-color: var(--wa-green);
+    width: 16px; height: 16px;
+    cursor: pointer;
+  }
+
+  /* Rating scale */
+  .rating-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 4px; }
+  .rating-table th {
+    background: var(--wa-teal);
+    color: white;
+    padding: 5px 4px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .rating-table td {
+    padding: 6px 4px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+  .rating-table tr:last-child td { border-bottom: none; }
+  .rating-table tr:nth-child(even) td { background: rgba(37,211,102,0.05); }
+  .rating-table .item-label { text-align: left; padding-left: 8px; font-weight: 600; font-size: 12px; }
+  .rating-table input[type=radio] { width: 14px; height: 14px; }
+  .rating-table th:first-child { text-align: left; padding-left: 8px; }
+
+  /* Bottom input bar */
+  .wa-input-bar {
+    position: sticky;
+    bottom: 0;
+    background: #f0f0f0;
+    padding: 8px 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-top: 1px solid #ddd;
+  }
+
+  .submit-btn {
+    flex: 1;
+    background: var(--wa-green);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 12px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 2px 6px rgba(37,211,102,0.4);
+  }
+  .submit-btn:hover { background: var(--wa-dark-green); }
+  .submit-btn:active { transform: scale(0.97); }
+
+  .mic-btn {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--wa-green);
+    border: none;
+    color: white;
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(37,211,102,0.4);
+    flex-shrink: 0;
+  }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    gap: 16px;
+    min-height: 300px;
+  }
+  .success-screen.show { display: flex; }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    background: var(--wa-green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    color: white;
+    box-shadow: 0 6px 20px rgba(37,211,102,0.4);
+    animation: pop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  }
+  @keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title { font-size: 20px; font-weight: 800; color: var(--wa-teal); }
+  .success-sub { font-size: 14px; color: var(--wa-sub); max-width: 280px; line-height: 1.6; }
+
+  /* Animations */
+  .bubble-row {
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Emoji inline */
+  .emoji { font-style: normal; }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.3);
+    height: 4px;
+    width: 100%;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--wa-green);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-shell">
+
+  <!-- Header -->
+  <div class="wa-header">
+    <div class="back-icon">←</div>
+    <div class="contact-avatar">SE</div>
+    <div class="contact-info">
+      <div class="contact-name">SPSS Training Survey</div>
+      <div class="contact-status">Stephen Edor Analytics · Pre-Training</div>
+    </div>
+    <div class="header-icons">
+      <span>📹</span>
+      <span>📞</span>
+      <span>⋮</span>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <!-- Chat Body -->
+  <div class="chat-body" id="chatBody">
+
+    <div class="date-stamp"><span>Today · SPSS Pre-Training Assessment</span></div>
+
+    <!-- Welcome bubble -->
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        👋 Welcome! This survey helps us understand your current level before the SPSS training begins. It takes about <strong>5–8 minutes</strong>. Your responses are confidential and will only be used to personalise your learning experience.
+        <div class="bubble-meta">9:01 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        Please fill in each section honestly — there are <strong>no wrong answers</strong>. 🎯
+        <div class="bubble-meta">9:01 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION A ===== -->
+    <div class="section-stamp">
+      <div class="section-header">📋 Section A: Background Information</div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q1</div>
+          <div class="question-text">What is your name? <em style="font-size:12px;color:#aaa">(optional)</em></div>
+          <input class="ans-text" type="text" placeholder="Type your name..." id="q1" style="height:38px;">
+        </div>
+        <div class="bubble-meta">9:02 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q2</div>
+          <div class="question-text">What is your field of study or work?</div>
+          <input class="ans-text" type="text" placeholder="e.g. Medicine, Public Health, Nursing..." id="q2" style="height:38px;">
+        </div>
+        <div class="bubble-meta">9:02 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q3</div>
+          <div class="question-text">What is your highest level of education?</div>
+          <div class="radio-group">
+            <label><input type="radio" name="q3" value="Secondary"> Secondary</label>
+            <label><input type="radio" name="q3" value="Undergraduate"> Undergraduate</label>
+            <label><input type="radio" name="q3" value="Postgraduate"> Postgraduate</label>
+          </div>
+        </div>
+        <div class="bubble-meta">9:03 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q4</div>
+          <div class="question-text">Have you used statistics before?</div>
+          <div class="radio-group">
+            <label><input type="radio" name="q4" value="Yes"> ✅ Yes</label>
+            <label><input type="radio" name="q4" value="No"> ❌ No</label>
+          </div>
+        </div>
+        <div class="bubble-meta">9:03 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION B ===== -->
+    <div class="section-header">📊 Section B: General Statistical Knowledge</div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        Rate your understanding of each concept. <br><strong>1 = None &nbsp;·&nbsp; 5 = Very Strong</strong>
+        <div style="margin-top:8px;">
+          <table class="rating-table">
+            <thead>
+              <tr>
+                <th>Concept</th>
+                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="item-label">Mean, Median, Mode</td>
+                <td><input type="radio" name="rb1" value="1"></td>
+                <td><input type="radio" name="rb1" value="2"></td>
+                <td><input type="radio" name="rb1" value="3"></td>
+                <td><input type="radio" name="rb1" value="4"></td>
+                <td><input type="radio" name="rb1" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Standard Deviation</td>
+                <td><input type="radio" name="rb2" value="1"></td>
+                <td><input type="radio" name="rb2" value="2"></td>
+                <td><input type="radio" name="rb2" value="3"></td>
+                <td><input type="radio" name="rb2" value="4"></td>
+                <td><input type="radio" name="rb2" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Correlation</td>
+                <td><input type="radio" name="rb3" value="1"></td>
+                <td><input type="radio" name="rb3" value="2"></td>
+                <td><input type="radio" name="rb3" value="3"></td>
+                <td><input type="radio" name="rb3" value="4"></td>
+                <td><input type="radio" name="rb3" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Regression</td>
+                <td><input type="radio" name="rb4" value="1"></td>
+                <td><input type="radio" name="rb4" value="2"></td>
+                <td><input type="radio" name="rb4" value="3"></td>
+                <td><input type="radio" name="rb4" value="4"></td>
+                <td><input type="radio" name="rb4" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Hypothesis Testing</td>
+                <td><input type="radio" name="rb5" value="1"></td>
+                <td><input type="radio" name="rb5" value="2"></td>
+                <td><input type="radio" name="rb5" value="3"></td>
+                <td><input type="radio" name="rb5" value="4"></td>
+                <td><input type="radio" name="rb5" value="5"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bubble-meta">9:04 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION C ===== -->
+    <div class="section-header">💻 Section C: SPSS Familiarity</div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q5</div>
+          <div class="question-text">Have you heard of IBM SPSS Statistics?</div>
+          <div class="radio-group">
+            <label><input type="radio" name="q5" value="Yes"> ✅ Yes</label>
+            <label><input type="radio" name="q5" value="No"> ❌ No</label>
+          </div>
+        </div>
+        <div class="bubble-meta">9:05 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q6</div>
+          <div class="question-text">Have you used SPSS before?</div>
+          <div class="radio-group">
+            <label><input type="radio" name="q6" value="Never"> 🔴 Never</label>
+            <label><input type="radio" name="q6" value="Beginner"> 🟡 Beginner – opened it once or twice</label>
+            <label><input type="radio" name="q6" value="Intermediate"> 🟢 Intermediate – can run basic analysis</label>
+            <label><input type="radio" name="q6" value="Advanced"> 🔵 Advanced</label>
+          </div>
+        </div>
+        <div class="bubble-meta">9:05 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q7</div>
+          <div class="question-text">Which of these can you do in SPSS? <em style="font-size:12px;color:#aaa">(Select all that apply)</em></div>
+          <div class="check-group">
+            <label><input type="checkbox" name="q7" value="Enter data"> Enter data</label>
+            <label><input type="checkbox" name="q7" value="Import Excel"> Import Excel data</label>
+            <label><input type="checkbox" name="q7" value="Descriptives"> Run descriptive statistics</label>
+            <label><input type="checkbox" name="q7" value="Charts"> Create charts</label>
+            <label><input type="checkbox" name="q7" value="t-tests"> Run t-tests</label>
+            <label><input type="checkbox" name="q7" value="Regression"> Run regression analysis</label>
+            <label><input type="checkbox" name="q7" value="Interpret"> Interpret output tables</label>
+          </div>
+        </div>
+        <div class="bubble-meta">9:06 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION D ===== -->
+    <div class="section-header">🛠️ Section D: Practical Skills</div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        Rate your ability. <strong>1 = Cannot do it &nbsp;·&nbsp; 5 = Very confident</strong>
+        <div style="margin-top:8px;">
+          <table class="rating-table">
+            <thead>
+              <tr>
+                <th>Skill</th>
+                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="item-label">Data entry & cleaning</td>
+                <td><input type="radio" name="rd1" value="1"></td>
+                <td><input type="radio" name="rd1" value="2"></td>
+                <td><input type="radio" name="rd1" value="3"></td>
+                <td><input type="radio" name="rd1" value="4"></td>
+                <td><input type="radio" name="rd1" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Choosing the right test</td>
+                <td><input type="radio" name="rd2" value="1"></td>
+                <td><input type="radio" name="rd2" value="2"></td>
+                <td><input type="radio" name="rd2" value="3"></td>
+                <td><input type="radio" name="rd2" value="4"></td>
+                <td><input type="radio" name="rd2" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Interpreting SPSS output</td>
+                <td><input type="radio" name="rd3" value="1"></td>
+                <td><input type="radio" name="rd3" value="2"></td>
+                <td><input type="radio" name="rd3" value="3"></td>
+                <td><input type="radio" name="rd3" value="4"></td>
+                <td><input type="radio" name="rd3" value="5"></td>
+              </tr>
+              <tr>
+                <td class="item-label">Reporting in thesis/project</td>
+                <td><input type="radio" name="rd4" value="1"></td>
+                <td><input type="radio" name="rd4" value="2"></td>
+                <td><input type="radio" name="rd4" value="3"></td>
+                <td><input type="radio" name="rd4" value="4"></td>
+                <td><input type="radio" name="rd4" value="5"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bubble-meta">9:07 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION E ===== -->
+    <div class="section-header">🧠 Section E: Hands-On Questions <em style="font-weight:400;font-size:12px">(Optional)</em></div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        These questions reveal your practical thinking. Answer as best you can — it's okay if you're unsure! 💡
+        <div class="bubble-meta">9:08 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q8</div>
+          <div class="question-text">What statistical test would you use to compare two groups?</div>
+          <textarea class="ans-text" rows="2" placeholder="Type your answer..." id="q8"></textarea>
+        </div>
+        <div class="bubble-meta">9:08 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q9</div>
+          <div class="question-text">What does a p-value represent?</div>
+          <textarea class="ans-text" rows="2" placeholder="Type your answer..." id="q9"></textarea>
+        </div>
+        <div class="bubble-meta">9:09 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q10</div>
+          <div class="question-text">Have you ever completed a data analysis project? Briefly explain.</div>
+          <textarea class="ans-text" rows="3" placeholder="Describe your experience..." id="q10"></textarea>
+        </div>
+        <div class="bubble-meta">9:09 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION F ===== -->
+    <div class="section-header">🎯 Section F: Learning Expectations</div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q11</div>
+          <div class="question-text">Why do you want to learn SPSS?</div>
+          <textarea class="ans-text" rows="3" placeholder="Share your motivation..." id="q11"></textarea>
+        </div>
+        <div class="bubble-meta">9:10 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q12</div>
+          <div class="question-text">What specific problems do you want to solve with SPSS?</div>
+          <textarea class="ans-text" rows="3" placeholder="e.g. Analyse my thesis data, research for my institution..." id="q12"></textarea>
+        </div>
+        <div class="bubble-meta">9:10 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        <div class="question-block">
+          <div class="question-num">Q13</div>
+          <div class="question-text">What is your preferred learning style?</div>
+          <div class="radio-group">
+            <label><input type="radio" name="q13" value="Hands-on"> 🖐️ Hands-on (practice first)</label>
+            <label><input type="radio" name="q13" value="Theory+Practice"> 📖 Theory + Practice</label>
+            <label><input type="radio" name="q13" value="Project-based"> 📁 Project-based</label>
+          </div>
+        </div>
+        <div class="bubble-meta">9:11 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- Final note -->
+    <div class="bubble-row received">
+      <div class="bubble received">
+        <div class="sender-name">Stephen Edor Analytics</div>
+        🙏 Thank you! Once you've filled in all sections, tap <strong>Submit Survey</strong> below. Your trainer will review your responses before the session begins. See you in class! 🎓
+        <div class="bubble-meta">9:11 AM <span class="tick">✓✓</span></div>
+      </div>
+    </div>
+
+    <!-- Success screen (hidden) -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Survey Submitted! 🎉</div>
+      <div class="success-sub">Thank you for completing the pre-training assessment. Your trainer will review your responses and personalise the SPSS session for you. See you in class!</div>
+    </div>
+
+  </div><!-- end chat-body -->
+
+  <!-- Input bar -->
+  <div class="wa-input-bar" id="inputBar">
+    <button class="submit-btn" onclick="submitSurvey()">✅ Submit Survey</button>
+    <button class="mic-btn">🎙️</button>
+  </div>
+
+</div>
+
+<script>
+  // Progress tracking
+  function updateProgress() {
+    const total = 13;
+    let filled = 0;
+
+    if (document.getElementById('q1').value.trim()) filled++;
+    if (document.getElementById('q2').value.trim()) filled++;
+    if (document.querySelector('input[name="q3"]:checked')) filled++;
+    if (document.querySelector('input[name="q4"]:checked')) filled++;
+    ['rb1','rb2','rb3','rb4','rb5'].forEach(n => {
+      if (document.querySelector(`input[name="${n}"]:checked`)) filled++;
+    });
+
+    const pct = Math.min(Math.round((filled / total) * 100), 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', updateProgress);
+    el.addEventListener('change', updateProgress);
+  });
+
+  function submitSurvey() {
+    // Collect all data
+    const data = {
+      name: document.getElementById('q1').value || 'Anonymous',
+      field: document.getElementById('q2').value,
+      education: document.querySelector('input[name="q3"]:checked')?.value || '',
+      usedStats: document.querySelector('input[name="q4"]:checked')?.value || '',
+      heardSPSS: document.querySelector('input[name="q5"]:checked')?.value || '',
+      SPSSLevel: document.querySelector('input[name="q6"]:checked')?.value || '',
+      preferredStyle: document.querySelector('input[name="q13"]:checked')?.value || '',
+    };
+
+    console.log('Survey submitted:', data);
+
+    // Show success
+    document.getElementById('successScreen').classList.add('show');
+    document.getElementById('inputBar').style.display = 'none';
+
+    // Scroll to bottom
+    const body = document.getElementById('chatBody');
+    body.scrollTop = body.scrollHeight;
+  }
+
+  // Auto-scroll on load
+  window.onload = () => {
+    document.getElementById('progressBar').style.width = '0%';
+  };
+</script>
+
+</body>
+</html>
